@@ -3,14 +3,26 @@ import React, {useEffect, useState} from 'react';
 import {number} from "prop-types";
 import {Table, TableContainer, TableHead, TableBody, TableCell, TableRow, Paper} from "@mui/material";
 
+interface PageParams {
+    userId: number;
+    // Другие параметры, если есть
+}
+interface User {
+    name: string;
+    phone: string;
+    email: string;
+    id: number;
+    website: string;
+}
 
-const Page = ({params}) => {
-    const [userData, setUserData] = useState({
+
+const Page: React.FC<{ params: PageParams }> = ({params}) => {
+    const [userData, setUserData] = useState<User>({
         name: '',
-        phone: number,
+        phone: '',
         email: '',
-        id:number,
-        website:''
+        id: 0,
+        website: ''
     });
 
 
@@ -24,24 +36,25 @@ const Page = ({params}) => {
 
         fetchPokemonData();
 
-    }, [])
+    }, [params.userId])
     console.log(userData)
     return (
         <div className='text-center w-1000 mx-auto'>
-            <TableContainer component={Paper} className=''>
-                <Table sx={{ minWidth: 350 }} size="small" aria-label="a dense table">
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>User</TableCell>
-                            <TableCell align="right">Phone</TableCell>
-                            <TableCell align="right">Email</TableCell>
-                            <TableCell align="right">Website</TableCell>
-                            <TableCell align="right">ID</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
+            {userData ?
+                <TableContainer component={Paper} >
+                    <Table sx={{ minWidth: 350 }} size="small" aria-label="a dense table">
+                        <TableHead>
+                            <TableRow>
+                                <TableCell>User</TableCell>
+                                <TableCell align="right">Phone</TableCell>
+                                <TableCell align="right">Email</TableCell>
+                                <TableCell align="right">Website</TableCell>
+                                <TableCell align="right">ID</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
                             <TableRow
-                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                sx={ { border: 0 } }
                             >
                                 <TableCell component="th" scope="row">
                                     {userData.name}
@@ -51,9 +64,10 @@ const Page = ({params}) => {
                                 <TableCell align="right">{userData.website}</TableCell>
                                 <TableCell align="right">{userData.id}</TableCell>
                             </TableRow>
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                        </TableBody>
+                    </Table>
+                </TableContainer> : <p>Loading ...</p>
+            }
         </div>
     );
 };

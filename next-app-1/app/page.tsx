@@ -1,7 +1,7 @@
 "use client"
 import Image from 'next/image'
 import {Box, Button, Modal, TextField, Typography} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, FormEventHandler} from "react";
 
 const style = {
   position: 'absolute' as 'absolute',
@@ -23,6 +23,7 @@ export default function Home() {
   const [phoneValue, serPhoneInputValue] = useState('')
 
 
+
   const handleClose = () => {
     setOpen(false);
   };
@@ -31,22 +32,25 @@ export default function Home() {
     setOpen(true)
   }
 
-  const passwordFunc = (e) => {
+  const passwordFunc = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPasswordValue(e.target.value)
   }
-  const nameFunc = (e) => {
+  const nameFunc = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputNameValue(e.target.value)
   }
 
-  const phoneFunc = (e) => {
+  const phoneFunc = (e: React.ChangeEvent<HTMLInputElement>) => {
     serPhoneInputValue(e.target.value)
   }
 
-  const handleSubmit = (e) => {
+  const handleSubmit: FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
     console.log('Name:', inputNameValue);
     console.log('Password:', passwordValue);
     console.log('Phone:', phoneValue);
+    if (inputNameValue && passwordValue && phoneValue) {
+      handleClose()
+    }
   }
 
 
@@ -185,12 +189,13 @@ export default function Home() {
                       <TextField value={inputNameValue} onChange={nameFunc} id="outlined-basic" label="name" variant="outlined" />
                       <TextField value={passwordValue} onChange={passwordFunc} id="outlined-basic" label="password" variant="outlined" />
                       <TextField value={phoneValue} onChange={phoneFunc} id="outlined-basic" label="phone" variant="outlined" />
-                      <Button type='submit' variant='outlined'>Авторизироваться</Button>
+                      <Button disabled={!inputNameValue || !passwordValue || !phoneValue} type='submit' variant='outlined'>Авторизироваться</Button>
                     </Box>
                   </form>
 
 
                 </Modal>
+
             </div> : null}
 
       </div>
